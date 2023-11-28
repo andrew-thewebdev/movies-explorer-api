@@ -1,5 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
-// prettier-ignore
+
 const urlRegexp = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,3}(:\d{1,5})?([/?#]\S*)?$/;
 
 module.exports = {

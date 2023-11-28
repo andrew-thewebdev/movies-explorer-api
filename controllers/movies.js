@@ -5,8 +5,8 @@ const BadRequestError = require('../errors/BadRequestError');
 const PermissionError = require('../errors/PermissionError');
 
 module.exports.getMovies = (req, res, next) => {
-  // prettier-ignore
-  Movie.find({}).sort({ _id: -1 })
+  const owner = req.user._id;
+  Movie.find({ owner }).sort({ _id: -1 })
     .populate('owner')
     .then((movies) => res.send(movies))
     .catch(next);
@@ -14,7 +14,6 @@ module.exports.getMovies = (req, res, next) => {
 
 module.exports.createMovie = async (req, res, next) => {
   try {
-    // prettier-ignore
     const {
       nameRU, nameEN, image, country, director,
       duration, year, description, trailerLink, thumbnail, movieId,

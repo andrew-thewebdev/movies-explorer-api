@@ -1,4 +1,4 @@
-const path = require('path');
+// const path = require('path');
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -19,14 +19,13 @@ const NotFoundError = require('./errors/NotFoundError');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-// prettier-ignore
 const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 
@@ -41,7 +40,7 @@ app.get('/crash-test', () => {
 app.post('/signin', validateProfileAtLogin, login);
 app.post('/signup', validateProfile, createUser);
 
-app.use(router);
+app.use(router); // Все роуты подключены в файле index.js, который находится в папке routes
 
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Ресурс не найден'));

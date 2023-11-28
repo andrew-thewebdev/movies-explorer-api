@@ -7,9 +7,7 @@ const DuplicateError = require('../errors/DuplicateError');
 const AuthenticationError = require('../errors/AuthenticationError');
 
 module.exports.getUsers = (req, res, next) => {
-  // prettier-ignore
   User.find({})
-    // .then((users) => res.send({ data: users }))
     .then((users) => res.send(users))
     .catch(next);
 };
@@ -33,7 +31,6 @@ const SAULT_ROUNDS = 10;
 
 module.exports.createUser = async (req, res, next) => {
   try {
-    // prettier-ignore
     const {
       name, password, email,
     } = req.body;
@@ -80,11 +77,13 @@ module.exports.updateUser = async (req, res, next) => {
         {
           new: true, // обработчик then получит на вход обновлённую запись
           runValidators: true, // данные будут валидированы перед изменением
-          upsert: true, // если пользователь не найден, он будет создан
         },
       ),
     );
   } catch (error) {
+    if (error.code === MONGO_DUPLICATE_ERROR_CODE) {
+      return next(new DuplicateError('Такой пользователь уже существует.'));
+    }
     if (error.name === 'ValidationError') {
       return next(
         new BadRequestError(
